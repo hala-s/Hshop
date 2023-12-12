@@ -3,7 +3,6 @@ import React from 'react'
 import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom'
 import './Categories.css'
-import ReactImageMagnify from 'react-image-magnify';
 
 export default function categoriesDetails() {
     const {category} =useParams();
