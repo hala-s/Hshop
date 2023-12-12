@@ -1,0 +1,19 @@
+body{
+    background-color: #eee !important;
+}
+.createCard{
+    background-color: #ccc !important;
+    color: #4C5372 !important;
+    border-radius: 5%;
+    -webkit-border-radius: 5%;
+    -moz-border-radius: 5%;
+    -ms-border-radius: 5%;
+    -o-border-radius: 5%;
+}
+.btn {
+    background-color: #4C5372 !important;
+    color:  #fff !important;
+}
+.color4C5372{
+   color: #4C5372 !important;
+}
