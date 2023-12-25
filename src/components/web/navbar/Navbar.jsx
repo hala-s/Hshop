@@ -1,8 +1,22 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/User.jsx";
+import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { CartContext } from "../context/Cart.jsx";
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    color:'white !important',
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 0',
+  },
+}));
 
 export default function Navbar() {
+  const {count} =useContext(CartContext);
+ 
   let { userToken , setUserToken, userData, setUserData } = useContext(UserContext);
 
   const navigate = useNavigate();
@@ -37,19 +51,24 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link"to="/allCategories">
                 Categories
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to= {`/products?page=:page&limit=:limit&sort=:sort`}>
                 Products
-              </a>
+              </Link>
             </li>
             {userToken ? (
               <li className="nav-item">
-                <Link className="nav-link" to="/cart">
-                  cart
+                <Link className="nav-link " to="/cart">
+                  
+                  <IconButton aria-label="cart">
+      <StyledBadge badgeContent={count} color="secondary" top={0} >
+        <ShoppingCartIcon />
+      </StyledBadge>
+    </IconButton>
                 </Link>
               </li>
             ) : null}

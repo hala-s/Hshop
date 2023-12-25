@@ -27,6 +27,11 @@ export default function Profile() {
             Contact
             </Link>
           </li>
+          <li className="nav-item py-3">
+            <Link to='orders' className="  px-0 text-center">
+            Orders
+            </Link>
+          </li>
         
         </ul>
         <hr />

@@ -17,6 +17,10 @@ import UserInfo from "../components/web/profile/UserInfo.jsx";
 import UserContact from "../components/web/profile/UserContact.jsx";
 import SendCode from "../components/web/auth/SendCode.jsx";
 import ForgetPassword from "../components/web/auth/ForgetPassword.jsx";
+import Products from "../components/products/Products.jsx";
+import AllCategories from "../components/web/categories/AllCategories.jsx";
+import Order from "../components/orders/Order.jsx";
+import Orders from "../components/web/profile/Orders.jsx";
 
 export  const router = createBrowserRouter([
     {
@@ -42,7 +46,12 @@ export  const router = createBrowserRouter([
             {
               path:'contact',
               element:<UserContact/>
-            }
+            },{
+              path:'orders',
+             element:
+                <Orders/>
+             
+            },
           ]
         },
         {
@@ -50,7 +59,14 @@ export  const router = createBrowserRouter([
          element:
             <Login />
          
-        },{
+        },
+        {
+          path:'order',
+         element:
+            <Order/>
+         
+        },
+        {
           path:'/sendCode',
           element:<SendCode/>
         },
@@ -80,6 +96,14 @@ export  const router = createBrowserRouter([
         {
           path:'product/:product',
           element:<Product/>
+        },{
+          path:'/allCategories',
+          element : <AllCategories/>
+
+        },
+        {
+          path:'products?page=:page&limit=:limit&sort=:sort',
+          element : <Products/>
         },
         {
           path:'*',

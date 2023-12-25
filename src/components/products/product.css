@@ -1,0 +1,29 @@
+.product{
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        
+       
+}
+.product img{
+    height: 400px !important;
+}
+h3,.nav-link{
+    color: #4c5372 !important;
+}
+.nav-link.active{
+    background-color: #4c5372 !important;
+    color: #fffdf6 !important;
+}
+.MuiRating-iconFilled{
+color: #e6e322 !important;
+
+}
+.MuiRating-iconEmpty{
+    color: #e6e322 !important;
+}
+.MuiBox-root{
+    margin-top: 15px;
+}
