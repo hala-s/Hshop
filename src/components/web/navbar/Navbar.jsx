@@ -56,7 +56,7 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to= {`/products?page=:page&limit=:limit&sort=:sort`}>
+              <Link className="nav-link" to= {`/products`}>
                 Products
               </Link>
             </li>

@@ -15,6 +15,7 @@ export default function Orders() {
   const cancelOrder = async(orderId)=>{
     const token = localStorage.getItem("user token");
     const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/order/cancel/6585eba808eb1e7b5dca5c08`,
+    orderId,
      {
       headers: { Authorization: `Tariq__${token}` },
     });

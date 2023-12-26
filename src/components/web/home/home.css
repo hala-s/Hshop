@@ -1,0 +1,8 @@
+.home{
+    background-image: url('./img/banner1.jpg');
+    height: 100vh;
+    background-size:cover;
+    background-position: -700px ;
+
+    
+}

@@ -102,7 +102,7 @@ export  const router = createBrowserRouter([
 
         },
         {
-          path:'products?page=:page&limit=:limit&sort=:sort',
+          path:'products',
           element : <Products/>
         },
         {

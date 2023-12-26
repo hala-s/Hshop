@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import { CartContext } from "../web/context/Cart.jsx";
@@ -14,29 +14,11 @@ import "./product.css";
 import { UserContext } from "../web/context/User.jsx";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
-import StarIcon from "@mui/icons-material/Star";
-import Typography from "@mui/material/Typography";
 import Review from "./Review.jsx";
-const labels = {
-  0.5: "Useless",
-  1: "Useless+",
-  1.5: "Poor",
-  2: "Poor+",
-  2.5: "Ok",
-  3: "Ok+",
-  3.5: "Good",
-  4: "Good+",
-  4.5: "Excellent",
-  5: "Excellent+",
-};
 
-function getLabelText(value) {
-  return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
-}
 export default function Product() {
-  const [value, setValue] = React.useState();
-  const [hover, setHover] = React.useState(-1);
-  let { userToken, setUserToken, userData, setUserData } =
+const [avgRting, setAvgRating] =useState();
+  let { userToken,  userData} =
     useContext(UserContext);
   const { product } = useParams();
   const getProduct = async () => {
@@ -44,6 +26,7 @@ export default function Product() {
       `${import.meta.env.VITE_API_URL}/products/${product}`
     );
     console.log(data);
+    setAvgRating(data.avgRating);
     return data.product;
   };
   const { data, isLoading } = useQuery("products", getProduct);
@@ -86,8 +69,51 @@ export default function Product() {
             ))}
           </Swiper>
         </div>
-        <div className="details col-md-6 mt-5 border p-5 border-3 ">
-          <ul className="nav nav-tabs" id="myTab" role="tablist">
+        <div className="col-md-6">
+        <div className="details mt-5">
+                <h3>{data.name}</h3>
+                <h5>
+                  <span>Price : </span>
+                  {data.price}$
+                </h5>
+                <h5>
+                  <span >Avarage Rating : </span>
+                  <Box
+                        sx={{
+                          "& > legend": { mt: 2 },
+                        }}
+                        className="d-inline-block m-0 "
+                      >
+                        <Rating
+                          name="read-only"
+                          value={avgRting}
+                          readOnly
+                        />
+                      </Box>
+                </h5>
+                <h5>
+                  <span>Discount : </span>
+                  {data.discount}$
+                </h5>
+                <div className="mt-3">
+                  {userToken ? (
+                    <button
+                      className="btn "
+                      onClick={() => addToCart(data._id)}
+                    >
+                      Add to cart
+                    </button>
+                  ) : (
+                    <Link className="btn " to="/login">
+                      Add to cart
+                    </Link>
+                  )}
+                </div>
+              </div>
+        </div>
+     
+        <div className="details  mt-5 border p-5 border-3 ">
+          <ul className="nav nav-tabs d-flex justify-content-center" id="myTab" role="tablist">
             <li className="nav-item " role="presentation">
               <button
                 className="nav-link active"
@@ -118,7 +144,7 @@ export default function Product() {
             </li>
           </ul>
 
-          <div className="tab-content" id="myTabContent">
+          <div className="tab-content " id="myTabContent">
             <div
               className="tab-pane fade show active"
               id="home-tab-pane"
@@ -127,26 +153,8 @@ export default function Product() {
               tabIndex="0"
             >
               <div className="details mt-3">
-                <h3>{data.name}</h3>
-                <h4>
-                  <span>Price : </span>
-                  {data.price}
-                </h4>
                 <p className="p-2">{data.description}</p>
-                <div className="text-center">
-                  {userToken ? (
-                    <button
-                      className="btn "
-                      onClick={() => addToCart(data._id)}
-                    >
-                      Add to cart
-                    </button>
-                  ) : (
-                    <Link className="btn " to="/login">
-                      Add to cart
-                    </Link>
-                  )}
-                </div>
+                
               </div>
             </div>
             <div
@@ -204,53 +212,18 @@ export default function Product() {
                     />
                   </div>
                   <div className="col-md-9">
-                    <Review/>
+                    <Review productId ={data._id}/>
                     
                   </div>
                 </div>
               )}
             </div>
-          </div>
+        
         </div>
+        </div>
+        
       </div>
     </div>
   );
 }
-{
-  /* <Box
-      sx={{
-        width: 200,
-        display: 'flex',
-        alignItems: 'center',
-      }}
-    >
-      <Rating
-        name="hover-feedback"
-        value={value}
-        precision={0.5}
-        getLabelText={getLabelText}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        onChangeActive={(event, newHover) => {
-          setHover(newHover);
-        }}
-        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-      />
-      {value !== null && (
-        <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
-      )}
-    </Box> */
-}
 
-{
-  /* <div className="">
-<Rating
-name="simple-controlled"
-value={value}
-onChange={(event, newValue) => {
-setValue(newValue);
-}}
-/>
-</div> */
-}

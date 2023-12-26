@@ -26,7 +26,12 @@ export default function Categories() {
  }
   return (
 
-    <div className='container'>
+    <div className='container my-5'>
+       <div className="categories-title text-center my-5">
+        <h2>
+        Categories
+        </h2>
+        </div>
  <Swiper
        modules={[Navigation, Pagination, Autoplay]}
       spaceBetween={50}

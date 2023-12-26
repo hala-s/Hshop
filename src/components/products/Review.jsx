@@ -1,103 +1,117 @@
-import React, { useContext } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import axios from "axios";
-import { toast } from "react-toastify";
-import {useNavigate, useParams } from "react-router-dom";
-import Input from "../pages/Input.jsx";
-export default function Review()  {
-    const { product } = useParams();
-  const initialValues = {
-    rate: "",
-    comment: "",
-  };
-  const onSubmit = async (users) => {
-    console.log(product);
+import React from 'react'
+import { useContext } from 'react'
 
-    // const token =localStorage.getItem("user token");
-    // console.log(token);
+import { useFormik } from 'formik'
+import axios from 'axios';
+import { toast } from 'react-toastify'
+import { useQuery } from 'react-query';
+import { UserContext } from '../web/context/User.jsx';
+import Input from '../pages/Input.jsx';
 
-    // const { data } = await axios.post(
-    //   `${import.meta.env.VITE_API_URL}/products/${product}/review`,
-    //   users,
-    //   {headers : {Authorization:`Tariq__${token}`}}
-    // );
-    //  console.log(data);
-    // if (data.message == "success") {
-    
-    //   toast.success("Review added successfully", {
-    //     position: "top-right",
-    //     autoClose: 5000,
-    //     hideProgressBar: false,
-    //     closeOnClick: false,
-    //     pauseOnHover: true,
-    //     draggable: true,
-    //     progress: undefined,
-    //     theme: "light",
-    //   });
-      
-    // }
-  };
-  const reviewSchema = yup.object({
-    comment: yup.string(),
-    rate: yup
-      .number()
-      .required("rating is required").max(5,'5 stars in max')
-  });
 
-  const formik = useFormik({
-    initialValues,
-    onSubmit,
-    validationSchema: reviewSchema,
-  });
-  const inputs = [
-    {
-      id: "comment",
-      type: "text",
-      name: "comment",
-      title: "comment",
-      value: formik.values.comment,
-    },
-    {
-      id: "rate",
-      type: "number",
-      name: "rate",
-      title: "rate",
-      value: formik.values.rate,
-    },
-  ];
-  const renderInputs = inputs.map((input, index) => (
-    <Input
-      type={input.type}
-      id={input.id}
-      name={input.name}
-      value={input.value}
-      title={input.title}
-      onChange={formik.handleChange}
-      onBlur={formik.handleBlur}
-      touched={formik.touched}
-      errors={formik.errors}
-      key={index}
-    />
-  ));
+export default function ReviewOrders({productId}) {
 
+    const initialValues={
+        comment: '',
+        rating: '',
+    };
+    const onSubmit = async () => {
+      const token =localStorage.getItem('user token');
+        try {
+            const { data } = await axios.post(
+               ` ${import.meta.env.VITE_API_URL}/products/${productId}/review`,
+                { comment: formik.values.comment, rating: formik.values.rating },
+                { headers: { Authorization: `Tariq__${token}` } }
+            );
+             console.log(data);
+            if (data.message == 'success') {
+                toast.success(`Reviw Added Successfully`,{
+                    position: "top-right",
+                    autoClose: true,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });   
+            }
+            return data;
+        } catch (error) {
+            console.error(error);
+            // Handle the error, show a toast, or perform other actions as needed
+        }
+    };
+    const formik = useFormik({
+        initialValues : initialValues,
+        onSubmit,
+    })
+    const inputs =[
+        {
+            type : 'text',
+            id:'comment',
+            name:'comment',
+            title:'Comment',
+            value:formik.values.comment,
+        },
+        {
+            type : 'number',
+            id:'rating',
+            name:'rating',
+            title:'Rating',
+            value:formik.values.rating,
+        },
+    ]
+    const renderInputs = inputs.map((input,index)=>
+        <Input type={input.type} 
+        id={input.id}
+         name={input.name}
+          title={input.title} 
+          key={index} 
+          errors={formik.errors} 
+          onChange={formik.handleChange}
+           onBlur={formik.handleBlur}
+            touched={formik.touched}
+            />
+     
+    )
+    const {getUserOrders,userToken} = useContext(UserContext);
+    const getUserOrder = async () => {
+        try {
+          const res = await getUserOrders();
+          //console.log(res.orders);
+          return res.orders;
+        } catch (error) {
+          console.error('Error fetching user orders:', error);
+          return [];
+        }
+      };
+      const {data,isLoading} = useQuery('get-user-orders' , getUserOrder);
+      console.log(data);
+    if(isLoading){
+        return <div className="loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3">
+        <span className="loader"></span>
+    </div>
+    }
+
+    //   let orders=getUserOrders();
+    //   console.log(orders);
   return (
-
-        <div className="d-flex justify-content-center mt-2">
-          <form onSubmit={formik.handleSubmit}>
-            {renderInputs}
-            <div className="text-center mt-3 ">
-              <button
-                className="m-2 btn "
-                type="submit"
-                disabled={!formik.isValid}
-              >
-               Submit
-              </button>
-             
+    <>
+         <form onSubmit={formik.handleSubmit}>
+           
+         {userToken && (
+            <div className='py-5'>
+              {renderInputs}
+                <div className="d-grid gap-2 pt-4 col-6 mx-auto">
+                    <button className="btn btn-success " type="submit">
+                        Post Your Review
+                    </button>
+                </div>
             </div>
-          </form>
-      </div>
+        )}
 
-  );
+        </form>
+    </>
+  )
 }

@@ -11,7 +11,7 @@ export default function AllCategories() {
       const { data } = await axios.get(
         `${import.meta.env.VITE_API_URL}/categories/active?page=${page}&limit=5`
       );
-      console.log(data.categoriess);
+      console.log(data);
       setCategories(data.categories);
     
     };
