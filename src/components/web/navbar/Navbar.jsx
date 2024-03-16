@@ -16,8 +16,10 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function Navbar() {
   const {count} =useContext(CartContext);
- 
   let { userToken , setUserToken, userData, setUserData } = useContext(UserContext);
+  console.log(userToken);
+  console.log(userData);
+
 
   const navigate = useNavigate();
   const logout = () => {
